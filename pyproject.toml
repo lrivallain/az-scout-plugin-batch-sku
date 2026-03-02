@@ -58,4 +58,4 @@ exclude = ["src/az_scout_plugin_batch_sku/_version\\.py$"]
 testpaths = ["tests"]
 
 [tool.uv.sources]
-az-scout = { git = "https://github.com/lrivallain/az-scout.git", rev = "feat/30" }
+az-scout = { git = "https://github.com/lrivallain/az-scout.git" }

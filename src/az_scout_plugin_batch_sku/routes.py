@@ -1,12 +1,10 @@
 """Batch SKU API routes for the plugin."""
 
-import logging
-
-from az_scout.azure_api import _get_headers, _paginate
+from az_scout.azure_api import _get_headers, _paginate  # type: ignore[attr-defined]
 from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
 
-logger = logging.getLogger(__name__)
+from az_scout_plugin_batch_sku._log import logger
 
 router = APIRouter()
 

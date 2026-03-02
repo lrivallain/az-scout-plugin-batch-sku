@@ -2,7 +2,7 @@
 
 import json
 
-from az_scout.azure_api import _get_headers, _paginate
+from az_scout.azure_api import _get_headers, _paginate  # type: ignore[attr-defined]
 
 BATCH_API_VERSION = "2024-07-01"
 AZURE_MGMT_URL = "https://management.azure.com"

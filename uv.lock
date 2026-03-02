@@ -44,8 +44,8 @@ wheels = [
 
 [[package]]
 name = "az-scout"
-version = "2026.2.27.0.dev26"
-source = { git = "https://github.com/lrivallain/az-scout.git?rev=feat%2F30#95a4f66b2000934014eb8471128c41b2c2c5c7ad" }
+version = "2026.3.0"
+source = { git = "https://github.com/lrivallain/az-scout.git#cdf92703dab4965c3aec95787ff65573dd04ad6e" }
 dependencies = [
     { name = "azure-identity" },
     { name = "click" },
@@ -77,7 +77,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "az-scout", git = "https://github.com/lrivallain/az-scout.git?rev=feat%2F30" },
+    { name = "az-scout", git = "https://github.com/lrivallain/az-scout.git" },
     { name = "fastapi" },
 ]
 
