@@ -41,4 +41,26 @@ def raw_skus() -> list[dict]:
             ],
             "batchSupportEndOfLife": None,
         },
+        {
+            "name": "Standard_M416ms_v2",
+            "familyName": "standardMSv2Family",
+            "capabilities": [
+                {"name": "vCPUs", "value": "416"},
+                {"name": "MemoryGB", "value": "11400"},
+                {"name": "GPUs", "value": "0"},
+                {"name": "LowPriorityCapable", "value": "True"},
+            ],
+            "batchSupportEndOfLife": None,
+        },
+        {
+            "name": "Standard_NC24s_v3",
+            "familyName": "standardNCSv3Family",
+            "capabilities": [
+                {"name": "vCPUs", "value": "24"},
+                {"name": "MemoryGB", "value": "448"},
+                {"name": "GPUs", "value": "4"},
+                {"name": "LowPriorityCapable", "value": "True"},
+            ],
+            "batchSupportEndOfLife": None,
+        },
     ]

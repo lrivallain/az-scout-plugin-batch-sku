@@ -39,14 +39,14 @@ async def test_list_batch_skus_success(client: AsyncClient, raw_skus: list[dict]
 
     assert data["region"] == "westeurope"
     assert data["subscriptionId"] == "sub-1"
-    assert data["totalSkus"] == 3
+    assert data["totalSkus"] == 5
 
     skus = data["skus"]
-    assert len(skus) == 3
+    assert len(skus) == 5
     # Sorted by family then name
     assert skus[0]["name"] == "Standard_D2s_v3"
     assert skus[1]["name"] == "Standard_E4s_v5"
-    assert skus[2]["name"] == "Standard_NC6"
+    assert skus[2]["name"] == "Standard_M416ms_v2"
 
 
 @pytest.mark.asyncio
