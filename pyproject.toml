@@ -33,10 +33,9 @@ batch_sku = "az_scout_plugin_batch_sku:plugin"
 
 [tool.hatch.version]
 source = "vcs"
+raw-options.version_scheme = "guess-next-dev"
 raw-options.local_scheme = "no-local-version"
-
-[tool.hatch.build.hooks.vcs]
-version-file = "src/az_scout_plugin_batch_sku/_version.py"
+raw-options.fallback_version = "0.1.0"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/az_scout_plugin_batch_sku"]
@@ -44,7 +43,6 @@ packages = ["src/az_scout_plugin_batch_sku"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-exclude = ["src/az_scout_plugin_batch_sku/_version.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W", "UP", "B", "SIM"]
@@ -52,7 +50,6 @@ select = ["E", "F", "I", "W", "UP", "B", "SIM"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-exclude = ["src/az_scout_plugin_batch_sku/_version\\.py$"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -42,6 +42,8 @@
         let lastSkuData = null;
         let _dataTable = null;
         let _filterState = {};
+        let _lastTenantId = "";
+        let _lastRegion = "";
 
         // --- helpers ---------------------------------------------------
         function getContext() {
@@ -130,17 +132,63 @@
             });
         }
 
-        async function refreshSubscriptions() {
-            const ctx = getContext();
-            resetResults();
+        function clearSubscriptionSelection() {
             batchSkuSubscriptions = [];
             selectedSubscriptionId = null;
             subHidden.value = "";
             subSearch.value = "";
             subDropdown.innerHTML = "";
+        }
 
-            if (!ctx.tenantId || !ctx.region) {
-                subSearch.placeholder = "Select tenant & region first";
+        function applySubscriptions(subs) {
+            const currentId = selectedSubscriptionId;
+            batchSkuSubscriptions = Array.isArray(subs) ? subs : [];
+
+            if (currentId && batchSkuSubscriptions.some(s => s.id === currentId)) {
+                const selected = batchSkuSubscriptions.find(s => s.id === currentId);
+                if (selected) {
+                    subHidden.value = selected.id;
+                    subSearch.value = selected.name;
+                }
+            } else {
+                selectedSubscriptionId = null;
+                subHidden.value = "";
+                subSearch.value = "";
+            }
+
+            renderSubDropdown("");
+            subSearch.placeholder = "Type to search subscriptions…";
+            subSearch.disabled = false;
+            updateLoadButton();
+        }
+
+        async function refreshSubscriptions({ allowApiFallback = true } = {}) {
+            const ctx = getContext();
+            resetResults();
+            clearSubscriptionSelection();
+
+            if (!ctx.tenantId) {
+                subSearch.placeholder = "Select a tenant first";
+                subSearch.disabled = true;
+                loadBtn.disabled = true;
+                return;
+            }
+
+            if (!ctx.region) {
+                subSearch.placeholder = "Select region first";
+                subSearch.disabled = true;
+                loadBtn.disabled = true;
+                return;
+            }
+
+            const coreSubs = typeof subscriptions !== "undefined" ? subscriptions : null;
+            if (Array.isArray(coreSubs) && coreSubs.length > 0) {
+                applySubscriptions(coreSubs);
+                return;
+            }
+
+            if (!allowApiFallback) {
+                subSearch.placeholder = "Waiting for subscriptions…";
                 subSearch.disabled = true;
                 loadBtn.disabled = true;
                 return;
@@ -389,18 +437,62 @@
             URL.revokeObjectURL(a.href);
         }
 
+        // --- core context event handlers ------------------------------
+        function handleTenantChanged(event) {
+            const tenantId = event?.detail?.tenantId || "";
+            if (tenantId === _lastTenantId) return;
+            _lastTenantId = tenantId;
+            refreshSubscriptions({ allowApiFallback: false });
+        }
+
+        function handleRegionChanged(event) {
+            const region = event?.detail?.region || "";
+            if (region === _lastRegion) return;
+            _lastRegion = region;
+            resetResults();
+            updateLoadButton();
+            refreshSubscriptions({ allowApiFallback: false });
+        }
+
+        function handleSubscriptionsLoaded(event) {
+            const eventTenantId = event?.detail?.tenantId || "";
+            const ctx = getContext();
+            if (!ctx.tenantId || eventTenantId !== ctx.tenantId) return;
+
+            const eventSubs = event?.detail?.subscriptions;
+            if (Array.isArray(eventSubs)) {
+                applySubscriptions(eventSubs);
+                return;
+            }
+
+            const coreSubs = typeof subscriptions !== "undefined" ? subscriptions : [];
+            applySubscriptions(coreSubs);
+        }
+
+        function handleRegionsLoaded() {
+            const ctx = getContext();
+            if (!ctx.tenantId) return;
+            refreshSubscriptions({ allowApiFallback: false });
+        }
+
         // --- event listeners ------------------------------------------
         initSubCombobox();
 
+        // Preferred integration path: subscribe to core app events
+        document.addEventListener("azscout:tenant-changed", handleTenantChanged);
+        document.addEventListener("azscout:region-changed", handleRegionChanged);
+        document.addEventListener("azscout:subscriptions-loaded", handleSubscriptionsLoaded);
+        document.addEventListener("azscout:regions-loaded", handleRegionsLoaded);
+
+        // Compatibility fallback for older cores (without custom events)
         if (tenantEl) {
-            tenantEl.addEventListener("change", () => refreshSubscriptions());
+            tenantEl.addEventListener("change", () => refreshSubscriptions({ allowApiFallback: false }));
         }
 
-        let _lastRegion = regionEl?.value || "";
         const regionObserver = new MutationObserver(() => {
             if (regionEl.value !== _lastRegion) {
                 _lastRegion = regionEl.value;
-                refreshSubscriptions();
+                refreshSubscriptions({ allowApiFallback: false });
             }
         });
         if (regionEl) {
@@ -408,7 +500,7 @@
             regionEl.addEventListener("change", () => {
                 if (regionEl.value !== _lastRegion) {
                     _lastRegion = regionEl.value;
-                    refreshSubscriptions();
+                    refreshSubscriptions({ allowApiFallback: false });
                 }
             });
         }
@@ -451,8 +543,10 @@
         csvBtn.addEventListener("click", () => exportCSV());
 
         // --- initial state --------------------------------------------
+        _lastTenantId = getContext().tenantId;
+        _lastRegion = getContext().region;
         if (getContext().tenantId && getContext().region) {
-            refreshSubscriptions();
+            refreshSubscriptions({ allowApiFallback: false });
         }
     }
 })();

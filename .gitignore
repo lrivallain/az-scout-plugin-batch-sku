@@ -10,12 +10,10 @@ wheels/
 .venv
 .vscode/
 !.vscode/tasks.json
+.env
 
 # Tool caches
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
 .coverage
-
-# Generated version file (hatch-vcs)
-src/*/_version.py

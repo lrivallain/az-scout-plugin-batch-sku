@@ -4,16 +4,18 @@ Lists Azure Batch-compatible VM SKUs per region, grouped by VM family.
 """
 
 from collections.abc import Callable
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _pkg_version
 from pathlib import Path
 from typing import Any
 
-from az_scout.plugin_api import TabDefinition
+from az_scout.plugin_api import ChatMode, TabDefinition
 from fastapi import APIRouter
 
 try:
-    from az_scout_plugin_batch_sku._version import __version__
-except ModuleNotFoundError:  # editable install or dev mode
-    __version__ = "0.0.0.dev0"
+    __version__ = _pkg_version("az-scout-plugin-batch-sku")
+except PackageNotFoundError:
+    __version__ = "0.0.0-dev"
 
 _STATIC_DIR = Path(__file__).parent / "static"
 
@@ -52,8 +54,12 @@ class BatchSkuPlugin:
             )
         ]
 
-    def get_chat_modes(self) -> list["Any"] | None:
+    def get_chat_modes(self) -> list[ChatMode] | None:
         """Return chat mode definitions, or None to skip."""
+        return None
+
+    def get_system_prompt_addendum(self) -> str | None:
+        """Return extra guidance for the default discussion chat mode, or None."""
         return None
 
 
