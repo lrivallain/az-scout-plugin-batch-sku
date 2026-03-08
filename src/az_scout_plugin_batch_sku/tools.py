@@ -2,10 +2,9 @@
 
 import json
 
-from az_scout.azure_api import _get_headers, _paginate  # type: ignore[attr-defined]
+from az_scout.azure_api import AZURE_MGMT_URL, arm_paginate
 
-BATCH_API_VERSION = "2024-07-01"
-AZURE_MGMT_URL = "https://management.azure.com"
+from az_scout_plugin_batch_sku._constants import BATCH_API_VERSION
 
 
 def _cap_float(capabilities: dict[str, str], key: str) -> float:
@@ -66,8 +65,7 @@ def list_batch_skus(
         f"/providers/Microsoft.Batch/locations/{region}"
         f"/virtualMachineSkus?api-version={BATCH_API_VERSION}"
     )
-    headers = _get_headers(tenant_id or None)
-    raw_skus = _paginate(url, headers, timeout=60)
+    raw_skus = arm_paginate(url, tenant_id=tenant_id or None, timeout=60)
 
     results: list[dict[str, object]] = []
     for sku in raw_skus:

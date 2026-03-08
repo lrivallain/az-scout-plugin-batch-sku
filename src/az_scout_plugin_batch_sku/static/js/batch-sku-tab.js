@@ -367,7 +367,7 @@
 
         function _matchNumericFilter(cellVal, filter) {
             const n = parseFloat(cellVal);
-            if (isNaN(n)) return false;
+            if (Number.isNaN(n)) return false;
             switch (filter.op) {
                 case ">": return n > filter.val;
                 case ">=": return n >= filter.val;
@@ -483,27 +483,6 @@
         document.addEventListener("azscout:region-changed", handleRegionChanged);
         document.addEventListener("azscout:subscriptions-loaded", handleSubscriptionsLoaded);
         document.addEventListener("azscout:regions-loaded", handleRegionsLoaded);
-
-        // Compatibility fallback for older cores (without custom events)
-        if (tenantEl) {
-            tenantEl.addEventListener("change", () => refreshSubscriptions({ allowApiFallback: false }));
-        }
-
-        const regionObserver = new MutationObserver(() => {
-            if (regionEl.value !== _lastRegion) {
-                _lastRegion = regionEl.value;
-                refreshSubscriptions({ allowApiFallback: false });
-            }
-        });
-        if (regionEl) {
-            regionObserver.observe(regionEl, { attributes: true, attributeFilter: ["value"] });
-            regionEl.addEventListener("change", () => {
-                if (regionEl.value !== _lastRegion) {
-                    _lastRegion = regionEl.value;
-                    refreshSubscriptions({ allowApiFallback: false });
-                }
-            });
-        }
 
         // Load Batch SKUs
         loadBtn.addEventListener("click", async () => {

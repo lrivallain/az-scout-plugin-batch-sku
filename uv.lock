@@ -44,7 +44,7 @@ wheels = [
 
 [[package]]
 name = "az-scout"
-version = "2026.3.0"
+version = "2026.3.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "azure-identity" },
@@ -54,11 +54,12 @@ dependencies = [
     { name = "jinja2" },
     { name = "mcp", extra = ["cli"] },
     { name = "requests" },
+    { name = "rich" },
     { name = "uvicorn", extra = ["standard"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/37/64/ebc6d15189c403bd7337b5b90b65113df6ffe0ae08517722ad34de11b6a5/az_scout-2026.3.0.tar.gz", hash = "sha256:7ee2b67ba6e54c7b59c2c07969becab867b1a63d9e403dac124a2251b4203dad", size = 309549, upload-time = "2026-03-02T21:25:49.839Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/fb/0d44379828dee49bfba10e9206c17a5dee09198b3f66609346d1be864eb8/az_scout-2026.3.4.tar.gz", hash = "sha256:a2631d1ea1e00b995fe153ac9a85f81f9e2688c8846f27423499d63e7321cc8c", size = 1296894, upload-time = "2026-03-08T11:23:00.309Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e0/5e/60c51493cd9579ec6c53908b9f6dcaa890c0aaa56262bd10961fa79f6b78/az_scout-2026.3.0-py3-none-any.whl", hash = "sha256:ddeee1e4d12e12df1c4f0ee137794e941d9e937a84b61a4d0210c27ef0ad96ae", size = 127824, upload-time = "2026-03-02T21:25:48.121Z" },
+    { url = "https://files.pythonhosted.org/packages/49/80/e1b91487a5d265e523a71107c79904712701ad5d49226be3d09f6d3f3e88/az_scout-2026.3.4-py3-none-any.whl", hash = "sha256:1e061c88895f4918e101b284e8c902f1d17debbe3ddf88ebf9a9218b08a6cc54", size = 155453, upload-time = "2026-03-08T11:22:58.314Z" },
 ]
 
 [[package]]
@@ -81,7 +82,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "az-scout", specifier = ">=2026.3.0" },
+    { name = "az-scout", specifier = ">=2026.3.4" },
     { name = "fastapi" },
 ]
 

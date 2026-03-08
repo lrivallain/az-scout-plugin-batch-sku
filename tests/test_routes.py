@@ -3,6 +3,7 @@
 from unittest.mock import patch
 
 import pytest
+from az_scout.plugin_api import PluginUpstreamError
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
@@ -22,12 +23,9 @@ def client():
 @pytest.mark.asyncio
 async def test_list_batch_skus_success(client: AsyncClient, raw_skus: list[dict]) -> None:
     """GET /batch-skus returns a flat sorted list of SKUs."""
-    with (
-        patch(
-            "az_scout_plugin_batch_sku.routes._get_headers",
-            return_value={"Authorization": "Bearer fake"},
-        ),
-        patch("az_scout_plugin_batch_sku.routes._paginate", return_value=raw_skus),
+    with patch(
+        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        return_value=raw_skus,
     ):
         resp = await client.get(
             "/batch-skus",
@@ -51,18 +49,19 @@ async def test_list_batch_skus_success(client: AsyncClient, raw_skus: list[dict]
 
 @pytest.mark.asyncio
 async def test_list_batch_skus_with_tenant(client: AsyncClient, raw_skus: list[dict]) -> None:
-    """Tenant ID is forwarded to _get_headers."""
-    with (
-        patch("az_scout_plugin_batch_sku.routes._get_headers", return_value={}) as mock_headers,
-        patch("az_scout_plugin_batch_sku.routes._paginate", return_value=raw_skus),
-    ):
+    """Tenant ID is forwarded to arm_paginate."""
+    with patch(
+        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        return_value=raw_skus,
+    ) as mock_paginate:
         resp = await client.get(
             "/batch-skus",
             params={"subscription_id": "sub-1", "region": "eastus", "tenant_id": "t-123"},
         )
 
     assert resp.status_code == 200
-    mock_headers.assert_called_once_with("t-123")
+    mock_paginate.assert_called_once()
+    assert mock_paginate.call_args.kwargs["tenant_id"] == "t-123"
 
 
 @pytest.mark.asyncio
@@ -70,9 +69,9 @@ async def test_list_batch_skus_capabilities_parsed(
     client: AsyncClient, raw_skus: list[dict]
 ) -> None:
     """Capabilities dict is flattened from name/value pairs."""
-    with (
-        patch("az_scout_plugin_batch_sku.routes._get_headers", return_value={}),
-        patch("az_scout_plugin_batch_sku.routes._paginate", return_value=raw_skus),
+    with patch(
+        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        return_value=raw_skus,
     ):
         resp = await client.get(
             "/batch-skus",
@@ -89,9 +88,9 @@ async def test_list_batch_skus_capabilities_parsed(
 @pytest.mark.asyncio
 async def test_list_batch_skus_eol_field(client: AsyncClient, raw_skus: list[dict]) -> None:
     """End-of-life date is preserved in the response."""
-    with (
-        patch("az_scout_plugin_batch_sku.routes._get_headers", return_value={}),
-        patch("az_scout_plugin_batch_sku.routes._paginate", return_value=raw_skus),
+    with patch(
+        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        return_value=raw_skus,
     ):
         resp = await client.get(
             "/batch-skus",
@@ -109,9 +108,9 @@ async def test_list_batch_skus_eol_field(client: AsyncClient, raw_skus: list[dic
 @pytest.mark.asyncio
 async def test_list_batch_skus_empty(client: AsyncClient) -> None:
     """GET /batch-skus with no SKUs returns an empty list."""
-    with (
-        patch("az_scout_plugin_batch_sku.routes._get_headers", return_value={}),
-        patch("az_scout_plugin_batch_sku.routes._paginate", return_value=[]),
+    with patch(
+        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        return_value=[],
     ):
         resp = await client.get(
             "/batch-skus",
@@ -126,21 +125,18 @@ async def test_list_batch_skus_empty(client: AsyncClient) -> None:
 
 @pytest.mark.asyncio
 async def test_list_batch_skus_error(client: AsyncClient) -> None:
-    """API errors return 500 with an error message."""
+    """API errors raise PluginUpstreamError."""
     with (
-        patch("az_scout_plugin_batch_sku.routes._get_headers", return_value={}),
         patch(
-            "az_scout_plugin_batch_sku.routes._paginate",
+            "az_scout_plugin_batch_sku.routes.arm_paginate",
             side_effect=RuntimeError("Azure API down"),
         ),
+        pytest.raises(PluginUpstreamError, match="Failed to fetch Batch SKUs"),
     ):
-        resp = await client.get(
+        await client.get(
             "/batch-skus",
             params={"subscription_id": "sub-1", "region": "westeurope"},
         )
-
-    assert resp.status_code == 500
-    assert "Azure API down" in resp.json()["error"]
 
 
 @pytest.mark.asyncio
