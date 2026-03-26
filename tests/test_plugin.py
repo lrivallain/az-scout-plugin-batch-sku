@@ -4,7 +4,7 @@ from pathlib import Path
 
 from az_scout.plugin_api import TabDefinition
 
-from az_scout_plugin_batch_sku import BatchSkuPlugin, plugin
+from az_scout_batch_sku import BatchSkuPlugin, plugin
 
 
 class TestPluginInstance:

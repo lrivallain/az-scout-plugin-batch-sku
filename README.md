@@ -30,7 +30,7 @@ az-scout-plugin-batch-sku/
 ├── pyproject.toml
 ├── README.md
 └── src/
-    └── az_scout_plugin_batch_sku/
+    └── az_scout_batch_sku/
         ├── __init__.py          # Plugin class + module-level `plugin` instance
         ├── routes.py            # FastAPI APIRouter — GET /plugins/batch_sku/batch-skus
         ├── tools.py             # MCP tool: list_batch_skus

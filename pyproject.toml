@@ -29,7 +29,7 @@ dev = [
 ]
 
 [project.entry-points."az_scout.plugins"]
-batch_sku = "az_scout_plugin_batch_sku:plugin"
+batch_sku = "az_scout_batch_sku:plugin"
 
 [tool.hatch.version]
 source = "vcs"
@@ -38,7 +38,7 @@ raw-options.local_scheme = "no-local-version"
 raw-options.fallback_version = "0.1.0"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/az_scout_plugin_batch_sku"]
+packages = ["src/az_scout_batch_sku"]
 
 [tool.ruff]
 line-length = 100
