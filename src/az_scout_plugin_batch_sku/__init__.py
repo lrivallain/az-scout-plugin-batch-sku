@@ -23,7 +23,7 @@ _STATIC_DIR = Path(__file__).parent / "static"
 class BatchSkuPlugin:
     """Plugin that lists Batch-compatible VM SKUs per region."""
 
-    name = "batch_sku"
+    name = "batch-sku"
     version = __version__
 
     def get_router(self) -> APIRouter | None:
@@ -46,7 +46,7 @@ class BatchSkuPlugin:
         """Return UI tab definitions, or None to skip."""
         return [
             TabDefinition(
-                id="batch_sku",
+                id="batch-sku",
                 label="Batch SKUs",
                 icon="bi bi-gpu-card",
                 js_entry="js/batch-sku-tab.js",

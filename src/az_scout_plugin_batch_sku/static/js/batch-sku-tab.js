@@ -2,7 +2,7 @@
 // Globals from app.js: apiFetch(url), tenantQS(prefix), subscriptions, regions
 // Global from CDN: simpleDatatables
 (function () {
-    const PLUGIN_NAME = "batch_sku";
+    const PLUGIN_NAME = "batch-sku";
     const container = document.getElementById("plugin-tab-" + PLUGIN_NAME);
     if (!container) return;
 
