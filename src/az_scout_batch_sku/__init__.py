@@ -28,13 +28,13 @@ class BatchSkuPlugin:
 
     def get_router(self) -> APIRouter | None:
         """Return API routes, or None to skip."""
-        from az_scout_plugin_batch_sku.routes import router
+        from az_scout_batch_sku.routes import router
 
         return router
 
     def get_mcp_tools(self) -> list[Callable[..., Any]] | None:
         """Return MCP tool functions, or None to skip."""
-        from az_scout_plugin_batch_sku.tools import list_batch_skus
+        from az_scout_batch_sku.tools import list_batch_skus
 
         return [list_batch_skus]
 

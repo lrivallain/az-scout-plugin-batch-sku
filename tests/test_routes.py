@@ -7,7 +7,7 @@ from az_scout.plugin_api import PluginUpstreamError
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from az_scout_plugin_batch_sku.routes import router
+from az_scout_batch_sku.routes import router
 
 app = FastAPI()
 app.include_router(router)
@@ -24,7 +24,7 @@ def client():
 async def test_list_batch_skus_success(client: AsyncClient, raw_skus: list[dict]) -> None:
     """GET /batch-skus returns a flat sorted list of SKUs."""
     with patch(
-        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        "az_scout_batch_sku.routes.arm_paginate",
         return_value=raw_skus,
     ):
         resp = await client.get(
@@ -51,7 +51,7 @@ async def test_list_batch_skus_success(client: AsyncClient, raw_skus: list[dict]
 async def test_list_batch_skus_with_tenant(client: AsyncClient, raw_skus: list[dict]) -> None:
     """Tenant ID is forwarded to arm_paginate."""
     with patch(
-        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        "az_scout_batch_sku.routes.arm_paginate",
         return_value=raw_skus,
     ) as mock_paginate:
         resp = await client.get(
@@ -70,7 +70,7 @@ async def test_list_batch_skus_capabilities_parsed(
 ) -> None:
     """Capabilities dict is flattened from name/value pairs."""
     with patch(
-        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        "az_scout_batch_sku.routes.arm_paginate",
         return_value=raw_skus,
     ):
         resp = await client.get(
@@ -89,7 +89,7 @@ async def test_list_batch_skus_capabilities_parsed(
 async def test_list_batch_skus_eol_field(client: AsyncClient, raw_skus: list[dict]) -> None:
     """End-of-life date is preserved in the response."""
     with patch(
-        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        "az_scout_batch_sku.routes.arm_paginate",
         return_value=raw_skus,
     ):
         resp = await client.get(
@@ -109,7 +109,7 @@ async def test_list_batch_skus_eol_field(client: AsyncClient, raw_skus: list[dic
 async def test_list_batch_skus_empty(client: AsyncClient) -> None:
     """GET /batch-skus with no SKUs returns an empty list."""
     with patch(
-        "az_scout_plugin_batch_sku.routes.arm_paginate",
+        "az_scout_batch_sku.routes.arm_paginate",
         return_value=[],
     ):
         resp = await client.get(
@@ -128,7 +128,7 @@ async def test_list_batch_skus_error(client: AsyncClient) -> None:
     """API errors raise PluginUpstreamError."""
     with (
         patch(
-            "az_scout_plugin_batch_sku.routes.arm_paginate",
+            "az_scout_batch_sku.routes.arm_paginate",
             side_effect=RuntimeError("Azure API down"),
         ),
         pytest.raises(PluginUpstreamError, match="Failed to fetch Batch SKUs"),

@@ -4,8 +4,8 @@ from az_scout.azure_api import AZURE_MGMT_URL, arm_paginate
 from az_scout.plugin_api import PluginUpstreamError
 from fastapi import APIRouter, Query
 
-from az_scout_plugin_batch_sku._constants import BATCH_API_VERSION
-from az_scout_plugin_batch_sku._log import logger
+from az_scout_batch_sku._constants import BATCH_API_VERSION
+from az_scout_batch_sku._log import logger
 
 router = APIRouter()
 

@@ -4,7 +4,7 @@ import json
 
 from az_scout.azure_api import AZURE_MGMT_URL, arm_paginate
 
-from az_scout_plugin_batch_sku._constants import BATCH_API_VERSION
+from az_scout_batch_sku._constants import BATCH_API_VERSION
 
 
 def _cap_float(capabilities: dict[str, str], key: str) -> float:
