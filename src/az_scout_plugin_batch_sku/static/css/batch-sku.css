@@ -31,3 +31,26 @@
     color: var(--bs-warning);
     font-size: 0.78rem;
 }
+
+/* Dark theme overrides */
+[data-theme="dark"] #batch-sku-sub-dropdown .dropdown-item.active,
+[data-theme="dark"] #batch-sku-sub-dropdown .dropdown-item:hover {
+    background: var(--bs-primary);
+    color: #fff;
+}
+
+[data-theme="dark"] .batch-sku-eol {
+    color: var(--bs-warning-text-emphasis);
+}
+
+@media (prefers-color-scheme: dark) {
+    #batch-sku-sub-dropdown .dropdown-item.active,
+    #batch-sku-sub-dropdown .dropdown-item:hover {
+        background: var(--bs-primary);
+        color: #fff;
+    }
+
+    .batch-sku-eol {
+        color: var(--bs-warning-text-emphasis);
+    }
+}

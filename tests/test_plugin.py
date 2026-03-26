@@ -14,7 +14,7 @@ class TestPluginInstance:
         assert isinstance(plugin, BatchSkuPlugin)
 
     def test_name(self) -> None:
-        assert plugin.name == "batch_sku"
+        assert plugin.name == "batch-sku"
 
     def test_version_is_string(self) -> None:
         assert isinstance(plugin.version, str)
@@ -51,7 +51,7 @@ class TestPluginMethods:
         assert len(tabs) == 1
         tab = tabs[0]
         assert isinstance(tab, TabDefinition)
-        assert tab.id == "batch_sku"
+        assert tab.id == "batch-sku"
         assert tab.label == "Batch SKUs"
         assert tab.js_entry == "js/batch-sku-tab.js"
         assert tab.css_entry == "css/batch-sku.css"
