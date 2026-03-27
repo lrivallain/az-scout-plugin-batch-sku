@@ -1,6 +1,6 @@
 # az-scout-plugin-batch-sku
 
-An [az-scout](https://github.com/az-scout/az-scout) plugin that lists Azure Batch-compatible VM SKUs per region, grouped by VM family.
+[az-scout](https://az-scout.com) plugin for Azure Batch-compatible VM SKUs per region, grouped by VM family.
 
 <img width="1178" height="941" alt="image" src="https://github.com/user-attachments/assets/19414de0-add9-48a0-ae55-4f7b0c893a32" />
 
@@ -16,11 +16,18 @@ An [az-scout](https://github.com/az-scout/az-scout) plugin that lists Azure Batc
 ## Setup
 
 ```bash
-# Install the plugin (editable mode for development)
-uv pip install -e .
+uv pip install az-scout-plugin-batch-sku
+az-scout  # plugin is auto-discovered
+```
 
-# Start az-scout — the plugin is auto-discovered
-az-scout
+For development:
+
+```bash
+git clone https://github.com/az-scout/az-scout-plugin-batch-sku
+cd az-scout-plugin-batch-sku
+uv sync --group dev
+uv pip install -e .
+az-scout  # plugin is auto-discovered
 ```
 
 ## Structure
@@ -54,13 +61,6 @@ az-scout-plugin-batch-sku/
 
 ## Quality checks
 
-The scaffold includes GitHub Actions workflows in `.github/workflows/`:
-
-- **`ci.yml`** — Runs lint (ruff + mypy) and tests (pytest) on Python 3.11–3.13, triggered on push/PR to `main`.
-- **`publish.yml`** — Builds, creates a GitHub Release, and publishes to PyPI via trusted publishing (OIDC). Triggered on version tags (`v*`). Requires a `pypi` environment configured in your repo settings with OIDC trusted publishing.
-
-Run the same checks locally:
-
 ```bash
 uv run ruff check src/ tests/
 uv run ruff format --check src/ tests/
@@ -68,18 +68,10 @@ uv run mypy src/
 uv run pytest
 ```
 
-To publish a release:
-
-```bash
-git tag v0.2.0
-git push origin v0.2.0
-```
-
 ## Copilot support
 
 The `.github/copilot-instructions.md` file provides context to GitHub Copilot about
-the plugin structure, conventions, and az-scout plugin API. It helps Copilot generate
-code that follows the project patterns.
+the plugin structure, conventions, and az-scout plugin API.
 
 ## License
 
@@ -87,4 +79,4 @@ code that follows the project patterns.
 
 ## Disclaimer
 
-> **This tool is not affiliated with Microsoft.** All capacity, pricing, and latency information are indicative and not a guarantee of deployment success. Spot placement scores are probabilistic. Quota values and pricing are dynamic and may change between planning and actual deployment. Latency values are based on [Microsoft published statistics](https://learn.microsoft.com/en-us/azure/networking/azure-network-latency) and must be validated with in-tenant measurements.
+> **This tool is not affiliated with Microsoft.** All capacity, pricing, and availability information is indicative and not a guarantee of deployment success. Values are dynamic and may change between planning and actual deployment. Always validate in official Microsoft sources and in your target tenant/subscription.
