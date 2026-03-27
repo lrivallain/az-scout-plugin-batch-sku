@@ -140,6 +140,24 @@ async def test_list_batch_skus_error(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
+async def test_list_batch_skus_obo_error_not_wrapped(client: AsyncClient) -> None:
+    """OboTokenError is re-raised as-is and not wrapped in PluginUpstreamError."""
+    from az_scout.azure_api import OboTokenError
+
+    with (
+        patch(
+            "az_scout_batch_sku.routes.arm_paginate",
+            side_effect=OboTokenError("OBO exchange failed"),
+        ),
+        pytest.raises(OboTokenError),
+    ):
+        await client.get(
+            "/batch-skus",
+            params={"subscription_id": "sub-1", "region": "westeurope"},
+        )
+
+
+@pytest.mark.asyncio
 async def test_list_batch_skus_missing_params(client: AsyncClient) -> None:
     """Missing required params return 422."""
     resp = await client.get("/batch-skus")

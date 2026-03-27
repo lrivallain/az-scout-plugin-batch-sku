@@ -1,6 +1,9 @@
 """Batch SKU API routes for the plugin."""
 
+import asyncio
+
 from az_scout.azure_api import AZURE_MGMT_URL, arm_paginate
+from az_scout.azure_api._obo import OboTokenError
 from az_scout.plugin_api import PluginUpstreamError
 from fastapi import APIRouter, Query
 
@@ -26,7 +29,7 @@ async def list_batch_skus(
             f"/providers/Microsoft.Batch/locations/{region}"
             f"/virtualMachineSkus?api-version={BATCH_API_VERSION}"
         )
-        raw_skus = arm_paginate(url, tenant_id=tenant_id, timeout=60)
+        raw_skus = await asyncio.to_thread(arm_paginate, url, tenant_id=tenant_id, timeout=60)
 
         skus: list[dict[str, object]] = []
         for sku in raw_skus:
@@ -50,6 +53,9 @@ async def list_batch_skus(
             "totalSkus": len(skus),
             "skus": skus,
         }
+    except OboTokenError:
+        # Let az-scout core handle it (returns 401, no traceback needed)
+        raise
     except Exception as exc:
         logger.exception("Failed to fetch Batch SKUs")
         raise PluginUpstreamError(f"Failed to fetch Batch SKUs: {exc}") from exc
