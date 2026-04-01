@@ -9,7 +9,7 @@ description = "Plugin for az-scout to list batch SKUs in Azure per region."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "az-scout>=2026.3.8",
+    "az-scout>=2026.4.0",
     "fastapi",
 ]
 
