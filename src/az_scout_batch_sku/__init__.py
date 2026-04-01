@@ -3,14 +3,19 @@
 Lists Azure Batch-compatible VM SKUs per region, grouped by VM family.
 """
 
-from collections.abc import Callable
+from __future__ import annotations
+
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _pkg_version
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 
-from az_scout.plugin_api import ChatMode, TabDefinition
-from fastapi import APIRouter
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import Any
+
+    from az_scout.plugin_api import ChatMode, TabDefinition
+    from fastapi import APIRouter
 
 try:
     __version__ = _pkg_version("az-scout-plugin-batch-sku")
@@ -44,6 +49,8 @@ class BatchSkuPlugin:
 
     def get_tabs(self) -> list[TabDefinition] | None:
         """Return UI tab definitions, or None to skip."""
+        from az_scout.plugin_api import TabDefinition
+
         return [
             TabDefinition(
                 id="batch-sku",

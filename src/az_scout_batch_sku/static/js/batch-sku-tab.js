@@ -1,5 +1,5 @@
 // Batch SKU plugin tab logic
-// Globals from app.js: apiFetch(url), tenantQS(prefix), subscriptions, regions,
+// Globals from app.js: apiFetch(url), apiPost(url, body), tenantQS(prefix), subscriptions, regions,
 //                      escapeHtml(str), formatNum(val, decimals)
 // Shared components: window.azScout.components (sku-badges, sku-detail-modal, data-filters)
 // Global from CDN: simpleDatatables

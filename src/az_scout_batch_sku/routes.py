@@ -73,7 +73,9 @@ async def list_batch_skus(
                 compute_skus = await asyncio.to_thread(get_skus, region, subscription_id, tenant_id)
                 compute_lookup = {s["name"]: s for s in compute_skus}
             except Exception:
-                logger.warning("Failed to fetch Compute RP SKU data; zones will be empty")
+                logger.warning(
+                    "Failed to fetch Compute RP SKU data; zones will be empty", exc_info=True
+                )
 
         skus = _normalize_batch_skus(raw_skus, compute_lookup)
 
