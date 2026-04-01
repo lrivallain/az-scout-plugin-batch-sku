@@ -170,19 +170,9 @@
             resetResults();
             clearSubscriptionSelection();
 
-            if (!ctx.tenantId) {
-                subSearch.placeholder = "Select a tenant first";
-                subSearch.disabled = true;
-                loadBtn.disabled = true;
-                return;
-            }
-
-            if (!ctx.region) {
-                subSearch.placeholder = "Select region first";
-                subSearch.disabled = true;
-                loadBtn.disabled = true;
-                return;
-            }
+            // Subscriptions are tenant-scoped, not region-scoped.
+            // In single-tenant mode, tenantId may be empty — that's fine,
+            // the core API returns subs for the default tenant.
 
             const coreSubs = typeof subscriptions !== "undefined" ? subscriptions : null;
             if (Array.isArray(coreSubs) && coreSubs.length > 0) {
@@ -853,8 +843,7 @@
         // --- initial state --------------------------------------------
         _lastTenantId = getContext().tenantId;
         _lastRegion = getContext().region;
-        if (getContext().tenantId && getContext().region) {
-            refreshSubscriptions({ allowApiFallback: false });
-        }
+        // Load subscriptions immediately — they don't depend on region
+        refreshSubscriptions({ allowApiFallback: false });
     }
 })();
