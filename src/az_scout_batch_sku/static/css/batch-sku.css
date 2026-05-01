@@ -18,7 +18,7 @@
 #batch-sku-sub-dropdown .dropdown-item.active,
 #batch-sku-sub-dropdown .dropdown-item:hover {
     background: var(--bs-primary);
-    color: #fff;
+    color: var(--bs-white);
 }
 
 #batch-sku-sub-dropdown .region-name {
@@ -114,7 +114,7 @@
 [data-theme="dark"] #batch-sku-sub-dropdown .dropdown-item.active,
 [data-theme="dark"] #batch-sku-sub-dropdown .dropdown-item:hover {
     background: var(--bs-primary);
-    color: #fff;
+    color: var(--bs-white);
 }
 
 [data-theme="dark"] .batch-sku-eol {
@@ -125,7 +125,7 @@
     #batch-sku-sub-dropdown .dropdown-item.active,
     #batch-sku-sub-dropdown .dropdown-item:hover {
         background: var(--bs-primary);
-        color: #fff;
+        color: var(--bs-white);
     }
 
     .batch-sku-eol {
