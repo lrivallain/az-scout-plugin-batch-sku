@@ -42,7 +42,7 @@ def _normalize_batch_skus(
 
 
 @router.get("/batch-skus")
-async def list_batch_skus(
+async def batch_skus_endpoint(
     subscription_id: str = Query(..., description="Azure subscription ID."),
     region: str = Query(..., description="Azure region name (e.g. westeurope)."),
     tenant_id: str | None = Query(None, description="Optional tenant ID."),

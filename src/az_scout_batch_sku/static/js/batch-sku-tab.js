@@ -207,7 +207,7 @@
         function resetResults() {
             _saveFilters();
             if (_dataTable) {
-                try { _dataTable.destroy(); } catch {}
+                try { _dataTable.destroy(); } catch (err) { console.debug("batch-sku: DataTable destroy:", err); }
                 _dataTable = null;
             }
             lastSkuData = null;
@@ -314,7 +314,7 @@
         function renderSkuTable(skus) {
             _saveFilters();
             if (_dataTable) {
-                try { _dataTable.destroy(); } catch {}
+                try { _dataTable.destroy(); } catch (err) { console.debug("batch-sku: DataTable destroy:", err); }
                 _dataTable = null;
             }
 

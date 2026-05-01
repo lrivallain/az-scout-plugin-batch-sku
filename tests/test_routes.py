@@ -14,10 +14,10 @@ app.include_router(router)
 
 
 @pytest.fixture()
-def client():
+async def client():
     """Return an async test client wired to the plugin router."""
-    transport = ASGITransport(app=app)
-    return AsyncClient(transport=transport, base_url="http://test")
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
+        yield c
 
 
 @pytest.mark.asyncio
